@@ -241,10 +241,10 @@ def apply_theme():
         </style>
         """, unsafe_allow_html=True)
     else:
-        # LIGHT THEME STYLING (Reset to default)
+        # COMPREHENSIVE LIGHT THEME STYLING (Mobile-Friendly)
         st.markdown("""
         <style>
-        /* Reset to light theme */
+        /* Light theme - ensure proper text visibility on all devices */
         .stApp {
             background-color: #ffffff !important;
             color: #262730 !important;
@@ -252,6 +252,180 @@ def apply_theme():
         
         .main .block-container {
             background-color: #ffffff !important;
+            color: #262730 !important;
+        }
+        
+        /* Sidebar styling for light theme */
+        .stSidebar {
+            background-color: #f0f2f6 !important;
+        }
+        
+        .stSidebar > div {
+            background-color: #f0f2f6 !important;
+        }
+        
+        /* All text elements - ensure dark text on light background */
+        .stMarkdown, .stText, p, h1, h2, h3, h4, h5, h6, span, div {
+            color: #262730 !important;
+        }
+        
+        /* Input elements for light theme */
+        .stSelectbox > div > div, .stSelectbox select {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        .stSlider > div > div {
+            background-color: #ffffff !important;
+        }
+        
+        .stTextInput > div > div > input {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        /* Buttons for light theme */
+        .stButton > button {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        .stButton > button:hover {
+            background-color: #f9fafb !important;
+            color: #111827 !important;
+        }
+        
+        /* Chat messages for light theme */
+        .stChatMessage {
+            background-color: #f9fafb !important;
+            border: 1px solid #e5e7eb !important;
+            color: #262730 !important;
+        }
+        
+        /* Chat input comprehensive styling for light theme */
+        .stChatInput {
+            background-color: #ffffff !important;
+        }
+        
+        .stChatInput > div {
+            background-color: #ffffff !important;
+        }
+        
+        .stChatInput > div > div {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        .stChatInput input, .stChatInput textarea {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        /* Chat input using data-testid */
+        div[data-testid="stChatInput"] {
+            background-color: #ffffff !important;
+        }
+        
+        div[data-testid="stChatInput"] > div {
+            background-color: #ffffff !important;
+        }
+        
+        div[data-testid="stChatInput"] > div > div {
+            background-color: #ffffff !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        div[data-testid="stChatInput"] input,
+        div[data-testid="stChatInput"] textarea {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        /* Bottom containers for light theme */
+        .stBottom, .stAppBottom {
+            background-color: #ffffff !important;
+        }
+        
+        .stBottom > div {
+            background-color: #ffffff !important;
+        }
+        
+        /* Chat input form containers */
+        form[data-testid="stChatInput"] {
+            background-color: #ffffff !important;
+        }
+        
+        form[data-testid="stChatInput"] > div {
+            background-color: #ffffff !important;
+        }
+        
+        /* Placeholder text for light theme */
+        div[data-testid="stChatInput"] input::placeholder,
+        div[data-testid="stChatInput"] textarea::placeholder {
+            color: #6b7280 !important;
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .stApp {
+                background-color: #ffffff !important;
+                color: #262730 !important;
+            }
+            
+            /* Ensure all text is visible on mobile */
+            .stMarkdown, .stText, p, h1, h2, h3, h4, h5, h6, span, div,
+            .stChatMessage, .stChatMessage * {
+                color: #262730 !important;
+            }
+            
+            /* Mobile chat input */
+            div[data-testid="stChatInput"] input,
+            div[data-testid="stChatInput"] textarea {
+                background-color: #ffffff !important;
+                color: #262730 !important;
+                border: 2px solid #d1d5db !important;
+            }
+            
+            /* Mobile sidebar */
+            .stSidebar, .stSidebar * {
+                background-color: #f9fafb !important;
+                color: #262730 !important;
+            }
+            
+            /* Mobile buttons */
+            .stButton > button {
+                background-color: #f3f4f6 !important;
+                color: #262730 !important;
+                border: 2px solid #d1d5db !important;
+            }
+        }
+        
+        /* Metrics for light theme */
+        .metric-container {
+            background-color: #f9fafb !important;
+            color: #262730 !important;
+        }
+        
+        /* Dividers for light theme */
+        .stDivider > div {
+            border-color: #e5e7eb !important;
+        }
+        
+        /* Download button for light theme */
+        .stDownloadButton > button {
+            background-color: #ffffff !important;
+            color: #262730 !important;
+            border: 1px solid #d1d5db !important;
+        }
+        
+        /* Info boxes for light theme */
+        .stInfo, .stSuccess, .stWarning, .stError {
+            background-color: #f9fafb !important;
             color: #262730 !important;
         }
         </style>
