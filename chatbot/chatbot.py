@@ -498,6 +498,20 @@ if "messages" not in st.session_state:
         }
     ]
 
+# Clean up any corrupted messages (response objects instead of strings)
+# This is a one-time cleanup for backward compatibility
+if st.session_state.messages:
+    cleaned_messages = []
+    for msg in st.session_state.messages:
+        if isinstance(msg.get("content"), str):
+            cleaned_messages.append(msg)
+        elif hasattr(msg.get("content"), 'content'):
+            # Extract content from response object
+            cleaned_msg = msg.copy()
+            cleaned_msg["content"] = msg["content"].content
+            cleaned_messages.append(cleaned_msg)
+    st.session_state.messages = cleaned_messages
+
 # =====================================================
 # 📌 MESSAGE COPY FUNCTIONALITY (PHASE 1 FEATURE)
 # =====================================================
@@ -589,7 +603,7 @@ if user_input := st.chat_input("Type your message here..."):
     
     # CREATE CONVERSATION MESSAGES FOR THE AI MODEL
     # Start with system prompt to define AI personality and behavior
-    messages = [
+    conversation_messages = [
         ("system", "You are CypherNova Chatbot, a friendly and helpful AI assistant. "
                    "Always answer warmly and conversationally. Keep responses concise and helpful.")
     ]
@@ -598,19 +612,25 @@ if user_input := st.chat_input("Type your message here..."):
     # Include all previous messages except the current user input (it's already added separately)
     for msg in st.session_state.messages[:-1]:  # Exclude the last message (current user input)
         if msg["role"] in ["user", "assistant"]:
-            messages.append((msg["role"], msg["content"]))
+            # Handle both string content and response objects (for backward compatibility)
+            content = msg["content"]
+            if hasattr(content, 'content'):  # If it's a response object, extract content
+                content = content.content
+            elif not isinstance(content, str):  # If it's not a string, convert it
+                content = str(content)
+            
+            # Escape any curly braces to prevent template variable issues
+            content = content.replace("{", "{{").replace("}", "}}")
+            conversation_messages.append((msg["role"], content))
     
     # ADD CURRENT USER INPUT
-    messages.append(("user", user_input))
+    # Escape any curly braces in user input to prevent template variable issues
+    safe_user_input = user_input.replace("{", "{{").replace("}", "}}")
+    conversation_messages.append(("user", safe_user_input))
     
     # CREATE LANGCHAIN PROMPT TEMPLATE
     # This structures the conversation for the AI model
-    prompt = ChatPromptTemplate.from_messages(messages)
-
-    # CREATE PROCESSING CHAIN
-    # prompt -> model -> output parser
-    output_parser = StrOutputParser()  # Converts model output to string
-    chain = prompt | llm | output_parser  # Chain components together
+    prompt = ChatPromptTemplate.from_messages(conversation_messages)
 
     # =====================================================
     # 📌 AI RESPONSE GENERATION & ANALYTICS TRACKING
@@ -627,8 +647,12 @@ if user_input := st.chat_input("Type your message here..."):
             start_time = time.time()
             
             # GET AI RESPONSE
-            # Invoke the chain with empty dict since all context is in the prompt
-            response = chain.invoke({})
+            # Format the prompt and get response from LLM directly
+            formatted_messages = prompt.format_messages()
+            ai_response = llm.invoke(formatted_messages)
+            
+            # Extract just the content from the response object
+            response = ai_response.content
             
             # CALCULATE AND STORE RESPONSE TIME
             response_time = time.time() - start_time
